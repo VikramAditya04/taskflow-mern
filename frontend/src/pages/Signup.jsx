@@ -30,28 +30,61 @@ export default function Signup() {
 
     setLoading(true);
     try {
-      console.log("Sending signup request...");
+      // Send signup request
       const response = await api.post("/auth/register", formData);
-      console.log("Signup response:", response.data);
+      console.log("✅ Signup response received:", response.status, response.data);
+      
+      // Extract token and user from response
+      const { token, user } = response.data;
+      console.log("Token:", token);
+      console.log("User:", user);
 
-      const token = response.data?.token;
-      const user = response.data?.user;
-
-      if (!token || !user) {
-        console.error("Invalid response - missing token or user");
-        toast.error("Invalid response from server");
+      // Validate token exists
+      if (!token) {
+        console.error("❌ No token in response");
+        toast.error("No authentication token received");
         setLoading(false);
         return;
       }
 
+      // Validate user data exists
+      if (!user || !user.id) {
+        console.error("❌ No user data in response");
+        toast.error("No user data received");
+        setLoading(false);
+        return;
+      }
+
+      // Save to auth context (saves to localStorage automatically)
       login(token, user);
-      console.log("Auth updated, navigating to dashboard...");
-      toast.success("Signup successful!");
-      setTimeout(() => navigate("/dashboard"), 500);
+      console.log("✅ Saved to auth context");
+
+      // Show success message
+      toast.success(`Account created! Welcome, ${user.name}!`);
+
+      // Navigate to dashboard
+      console.log("Navigating to dashboard...");
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 300);
+
     } catch (error) {
-      console.error("Signup failed:", error.response?.data || error.message);
-      const message = error.response?.data?.message || "Signup failed";
-      toast.error(message);
+      console.error("❌ Signup error:", error);
+      
+      // Get error message from response
+      const errorMsg = 
+        error.response?.data?.message || 
+        error.response?.statusText ||
+        error.message || 
+        "Signup failed";
+      
+      console.error("Error details:", {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: errorMsg
+      });
+      
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }

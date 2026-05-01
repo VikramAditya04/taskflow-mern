@@ -33,15 +33,15 @@ export const register = async (req, res) => {
       role,
     });
 
+    const token = generateToken(user._id);
     res.status(201).json({
-      success: true, 
-      message: "User registered",
-      token: generateToken(user._id),
+      message: "User registered successfully",
+      token: token,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role,
+        role: user.role || "member",
       },
     });
 
@@ -72,15 +72,15 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
     }
 
+    const token = generateToken(user._id);
     res.status(200).json({
-      success: true, 
       message: "Login successful",
-      token: generateToken(user._id),
+      token: token,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role,
+        role: user.role || "member",
       },
     });
 
@@ -94,5 +94,5 @@ export const login = async (req, res) => {
 // LOGOUT
 export const logout = async (req, res) => {
   // JWT logout handled on frontend
-  res.status(200).json({ success: true, message: "Logged out successfully" });
+  res.status(200).json({ message: "Logged out successfully" });
 };

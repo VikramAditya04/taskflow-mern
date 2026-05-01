@@ -29,32 +29,61 @@ export default function Login() {
 
     setLoading(true);
     try {
-      console.log("Sending login request...");
+      // Send login request
       const response = await api.post("/auth/login", formData);
-      console.log("Login response:", response.data);
+      console.log("✅ Login response received:", response.status, response.data);
       
-      const token = response.data?.token;
-      const user = response.data?.user;
+      // Extract token and user from response
+      const { token, user } = response.data;
+      console.log("Token:", token);
+      console.log("User:", user);
 
-      if (!token || !user) {
-        console.error("Invalid response - missing token or user");
-        toast.error("Invalid response from server");
+      // Validate token exists
+      if (!token) {
+        console.error("❌ No token in response");
+        toast.error("No authentication token received");
         setLoading(false);
         return;
       }
 
+      // Validate user data exists
+      if (!user || !user.id) {
+        console.error("❌ No user data in response");
+        toast.error("No user data received");
+        setLoading(false);
+        return;
+      }
+
+      // Save to auth context (saves to localStorage automatically)
       login(token, user);
-      console.log("Auth updated with token:", token, "user:", user);
-      toast.success("Login successful");
-      // Navigate to dashboard based on role
-      const destination = user?.role === "admin" ? "/dashboard" : "/dashboard";
-      console.log("Navigating to:", destination);
-      setTimeout(() => navigate(destination), 500);
+      console.log("✅ Saved to auth context");
+
+      // Show success message
+      toast.success(`Welcome back, ${user.name}!`);
+
+      // Navigate to dashboard
+      console.log("Navigating to dashboard...");
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 300);
+
     } catch (error) {
-      console.error("Login failed:", error.response?.data || error.message);
-      const message =
-        error.response?.data?.message || error.message || "Invalid credentials";
-      toast.error(message);
+      console.error("❌ Login error:", error);
+      
+      // Get error message from response
+      const errorMsg = 
+        error.response?.data?.message || 
+        error.response?.statusText ||
+        error.message || 
+        "Login failed";
+      
+      console.error("Error details:", {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: errorMsg
+      });
+      
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
