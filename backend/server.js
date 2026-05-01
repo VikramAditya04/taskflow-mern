@@ -23,21 +23,24 @@ process.env.FRONTEND_URL,
 ];
 
 // CORS Setup 
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "http://localhost:5173"
+];
+
 app.use(cors({
-origin: function (origin, callback) {
-// allow requests with no origin 
-if (!origin) return callback(null, true);
+  origin: function (origin, callback) {
+    // allow tools like Postman or no-origin requests
+    if (!origin) return callback(null, true);
 
-```
-if (allowedOrigins.includes(origin)) {
-  return callback(null, true);
-} else {
-  return callback(new Error("Not allowed by CORS"));
-}
-```
+    // allow if in list OR if env not set properly
+    if (allowedOrigins.includes(origin) || !process.env.FRONTEND_URL) {
+      return callback(null, true);
+    }
 
-},
-credentials: true
+    return callback(null, false); 
+  },
+  credentials: true
 }));
 
 // Middlewares
