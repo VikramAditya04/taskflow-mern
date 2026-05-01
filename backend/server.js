@@ -23,23 +23,16 @@ const allowedOrigins = [
   "http://localhost:3000"
 ];
 
-// CORS Setup 
+// CORS Setup - Allow all origins for development
 app.use(cors({
-  origin: function (origin, callback) {
-    // allow tools like Postman or no-origin requests
-    if (!origin) return callback(null, true);
-
-    // allow if in list OR if env not set properly
-    if (allowedOrigins.includes(origin) || !process.env.FRONTEND_URL) {
-      return callback(null, true);
-    }
-
-    return callback(null, false); 
-  },
+  origin: true,  // Allow all origins
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  optionsSuccessStatus: 200
+  exposedHeaders: ["Content-Type", "Authorization"],
+  maxAge: 86400,
+  optionsSuccessStatus: 200,
+  preflightContinue: false
 }));
 
 // Middlewares

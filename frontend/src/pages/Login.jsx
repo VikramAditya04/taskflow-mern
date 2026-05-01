@@ -44,9 +44,12 @@ export default function Login() {
       }
 
       login(token, user);
-      console.log("Auth updated, navigating...");
+      console.log("Auth updated with token:", token, "user:", user);
       toast.success("Login successful");
-      navigate("/");
+      // Navigate to dashboard based on role
+      const destination = user?.role === "admin" ? "/dashboard" : "/dashboard";
+      console.log("Navigating to:", destination);
+      setTimeout(() => navigate(destination), 500);
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);
       const message =

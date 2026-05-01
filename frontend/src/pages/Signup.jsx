@@ -3,9 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import AuthLayout from "./AuthLayout";
 import api from "../services/api";
+import { useAuth } from "../context/AuthContext";
 
 export default function Signup() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -28,10 +30,26 @@ export default function Signup() {
 
     setLoading(true);
     try {
-      await api.post("/auth/register", formData);
-      toast.success("Signup successful");
-      navigate("/login");
+      console.log("Sending signup request...");
+      const response = await api.post("/auth/register", formData);
+      console.log("Signup response:", response.data);
+
+      const token = response.data?.token;
+      const user = response.data?.user;
+
+      if (!token || !user) {
+        console.error("Invalid response - missing token or user");
+        toast.error("Invalid response from server");
+        setLoading(false);
+        return;
+      }
+
+      login(token, user);
+      console.log("Auth updated, navigating to dashboard...");
+      toast.success("Signup successful!");
+      setTimeout(() => navigate("/dashboard"), 500);
     } catch (error) {
+      console.error("Signup failed:", error.response?.data || error.message);
       const message = error.response?.data?.message || "Signup failed";
       toast.error(message);
     } finally {
