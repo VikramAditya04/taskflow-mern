@@ -94,6 +94,5 @@ export const login = async (req, res) => {
 // LOGOUT
 export const logout = async (req, res) => {
   // JWT logout handled on frontend
-  success: false, 
-  res.status(200).json({ message: "Logged out successfully" });
+  res.status(200).json({ success: true, message: "Logged out successfully" });
 };
