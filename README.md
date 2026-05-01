@@ -15,6 +15,7 @@ This project demonstrates real-world full-stack development skills including aut
 User Signup (Name, Email, Password)
 Secure Login using JWT
 Protected routes & session handling
+
 📁 Project Management
 Create new projects
 Project creator becomes Admin
@@ -23,6 +24,7 @@ Add members
 Remove members
 Members can:
 View assigned projects
+
 ✅ Task Management
 Create tasks with:
 Title
@@ -34,12 +36,14 @@ Update task status:
 To Do
 In Progress
 Done
+
 📊 Dashboard
 Total tasks overview
 Tasks categorized by status
 Tasks assigned per user
 Overdue tasks tracking
 🛡️ Role-Based Access Control
+
 👑 Admin
 Manage projects
 Add/remove members
@@ -47,6 +51,7 @@ Create & assign tasks
 👤 Member
 View assigned projects
 Update only their assigned tasks
+
 🧱 Tech Stack
 Frontend
 React.js
@@ -60,9 +65,11 @@ JWT Authentication
 Bcrypt.js
 Database
 MongoDB (Mongoose)
+
 Deployment
 Frontend + Backend: Railway
 Database: MongoDB Atlas
+
 🗂️ Project Structure
 taskflow/
 │
@@ -76,6 +83,7 @@ taskflow/
 ├── .env
 ├── package.json
 └── README.md
+
 🔌 API Endpoints
 🔑 Auth
 POST /api/auth/signup
@@ -85,15 +93,18 @@ POST   /api/projects
 GET    /api/projects
 PUT    /api/projects/:id/add-member
 DELETE /api/projects/:id/remove-member
+
 ✅ Tasks
 POST   /api/tasks
 GET    /api/tasks/project/:projectId
 PUT    /api/tasks/:id
 DELETE /api/tasks/:id
+
 ⚙️ Installation & Setup
 1️⃣ Clone the repository
 git clone https://github.com/your-username/taskflow.git
 cd taskflow
+
 2️⃣ Install dependencies
 Backend
 cd server
@@ -101,6 +112,7 @@ npm install
 Frontend
 cd client
 npm install
+
 3️⃣ Setup Environment Variables
 
 Create a .env file in /server:
@@ -108,6 +120,7 @@ Create a .env file in /server:
 PORT=5000
 MONGO_URI=your_mongodb_connection
 JWT_SECRET=your_secret_key
+
 4️⃣ Run the project
 Start backend
 cd server
@@ -115,6 +128,7 @@ npm run dev
 Start frontend
 cd client
 npm run dev
+
 🚀 Deployment
 
 The application is deployed on Railway:
@@ -125,12 +139,14 @@ The application is deployed on Railway:
 Ensure correct API base URL in production
 CORS must be properly configured
 Environment variables must be set correctly in deployment
+
 💡 Future Improvements
 Real-time updates using Socket.io
 Drag & drop task board (Trello-style)
 Notifications system
 Calendar view for tasks
 Advanced filtering & search
+
 🧑‍💻 Author
 
 Vikram Aditya
