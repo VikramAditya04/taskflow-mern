@@ -1,5 +1,23 @@
 import StatusBadge from "./StatusBadge";
 
+function PriorityBadge({ priority }) {
+  const colorMap = {
+    low: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+    medium: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+    high: "bg-red-500/20 text-red-400 border-red-500/30",
+  };
+
+  return (
+    <span
+      className={`rounded-full px-3 py-1 text-xs font-semibold border ${
+        colorMap[priority] || colorMap.medium
+      }`}
+    >
+      {priority?.charAt(0).toUpperCase() + priority?.slice(1) || "Medium"}
+    </span>
+  );
+}
+
 export default function TaskCard({ task, onStatusChange, loading }) {
   return (
     <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-5 shadow-lg transition hover:border-white/20">
@@ -11,7 +29,10 @@ export default function TaskCard({ task, onStatusChange, loading }) {
               {task.description || "No description provided"}
             </p>
           </div>
-          <StatusBadge status={task.status} />
+          <div className="flex gap-2">
+            <StatusBadge status={task.status} />
+            <PriorityBadge priority={task.priority} />
+          </div>
         </div>
 
         <div className="space-y-2 text-sm text-gray-400">

@@ -54,18 +54,22 @@ export default function Login() {
         return;
       }
 
+      // Ensure user has a role (default to member if not provided)
+      const userWithRole = {
+        ...user,
+        role: user.role || "member"
+      };
+
       // Save to auth context (saves to localStorage automatically)
-      login(token, user);
-      console.log("✅ Saved to auth context");
+      login(token, userWithRole);
+      console.log("✅ Saved to auth context with user role:", userWithRole.role);
 
       // Show success message
-      toast.success(`Welcome back, ${user.name}!`);
+      toast.success(`Welcome back, ${userWithRole.name}!`);
 
-      // Navigate to dashboard
+      // Navigate to dashboard - use direct navigation since localStorage is already updated
       console.log("Navigating to dashboard...");
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 300);
+      navigate("/dashboard", { replace: true });
 
     } catch (error) {
       console.error("❌ Login error:", error);
@@ -84,7 +88,6 @@ export default function Login() {
       });
       
       toast.error(errorMsg);
-    } finally {
       setLoading(false);
     }
   };

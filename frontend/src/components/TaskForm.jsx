@@ -8,6 +8,7 @@ export default function TaskForm({ projectId, users, onCreated }) {
     description: "",
     assignedTo: "",
     dueDate: "",
+    priority: "medium",
   });
   const [loading, setLoading] = useState(false);
 
@@ -42,6 +43,7 @@ export default function TaskForm({ projectId, users, onCreated }) {
         description: "",
         assignedTo: users?.[0]?._id || "",
         dueDate: "",
+        priority: "medium",
       });
       onCreated?.();
     } catch (error) {
@@ -123,6 +125,23 @@ export default function TaskForm({ projectId, users, onCreated }) {
             className="w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
           />
         </div>
+      </div>
+
+      <div>
+        <label className="block text-sm text-gray-400 mb-2" htmlFor="priority">
+          Priority
+        </label>
+        <select
+          id="priority"
+          name="priority"
+          value={formData.priority}
+          onChange={handleChange}
+          className="w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
+        >
+          <option value="low" className="bg-slate-900">Low</option>
+          <option value="medium" className="bg-slate-900">Medium</option>
+          <option value="high" className="bg-slate-900">High</option>
+        </select>
       </div>
 
       <button

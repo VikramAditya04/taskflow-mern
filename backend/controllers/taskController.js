@@ -3,7 +3,7 @@ import Project from "../models/projectModel.js";
 
 // CREATE TASK (Admin only)
 export const createTask = async (req, res) => {
-  const { title, description, assignedTo, projectId, dueDate } = req.body;
+  const { title, description, assignedTo, projectId, dueDate, priority } = req.body;
   const userId = req.user._id;
 
   try {
@@ -20,6 +20,13 @@ export const createTask = async (req, res) => {
       return res.status(404).json({ message: "Project not found" });
     }
 
+    // Validate priority if provided
+    if (priority && !["low", "medium", "high"].includes(priority)) {
+      return res.status(400).json({
+        message: "Priority must be one of: low, medium, high",
+      });
+    }
+
     // Create task
     const task = await Task.create({
       title,
@@ -27,6 +34,7 @@ export const createTask = async (req, res) => {
       assignedTo,
       projectId,
       dueDate,
+      priority: priority || "medium",
       createdBy: userId,
     });
 
@@ -162,7 +170,7 @@ export const updateTaskStatus = async (req, res) => {
 export const updateTask = async (req, res) => {
   const { taskId, id } = req.params;
   const taskLookupId = taskId || id;
-  const { title, description, assignedTo, dueDate, status } = req.body;
+  const { title, description, assignedTo, dueDate, status, priority } = req.body;
   const userId = req.user._id;
 
   try {
@@ -178,12 +186,20 @@ export const updateTask = async (req, res) => {
       });
     }
 
+    // Validate priority if provided
+    if (priority && !["low", "medium", "high"].includes(priority)) {
+      return res.status(400).json({
+        message: "Priority must be one of: low, medium, high",
+      });
+    }
+
     // Update fields
     if (title) task.title = title;
     if (description) task.description = description;
     if (assignedTo) task.assignedTo = assignedTo;
     if (dueDate) task.dueDate = dueDate;
     if (status) task.status = status;
+    if (priority) task.priority = priority;
 
     await task.save();
     await task.populate("assignedTo", "name email");
