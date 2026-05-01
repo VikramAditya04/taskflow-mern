@@ -18,16 +18,12 @@ connectDB();
 
 //  Allowed Origins
 const allowedOrigins = [
-process.env.FRONTEND_URL,   
-"http://localhost:5173"    
+  process.env.FRONTEND_URL || "http://localhost:5173",
+  "http://localhost:5173",
+  "http://localhost:3000"
 ];
 
 // CORS Setup 
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  "http://localhost:5173"
-];
-
 app.use(cors({
   origin: function (origin, callback) {
     // allow tools like Postman or no-origin requests
@@ -40,7 +36,10 @@ app.use(cors({
 
     return callback(null, false); 
   },
-  credentials: true
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  optionsSuccessStatus: 200
 }));
 
 // Middlewares

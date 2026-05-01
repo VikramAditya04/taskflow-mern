@@ -29,19 +29,28 @@ export default function Login() {
 
     setLoading(true);
     try {
+      console.log("Sending login request...");
       const response = await api.post("/auth/login", formData);
+      console.log("Login response:", response.data);
+      
       const token = response.data?.token;
       const user = response.data?.user;
 
-      if (token && user) {
-        login(token, user);
+      if (!token || !user) {
+        console.error("Invalid response - missing token or user");
+        toast.error("Invalid response from server");
+        setLoading(false);
+        return;
       }
 
+      login(token, user);
+      console.log("Auth updated, navigating...");
       toast.success("Login successful");
       navigate("/");
     } catch (error) {
+      console.error("Login failed:", error.response?.data || error.message);
       const message =
-        error.response?.data?.message || "Invalid credentials";
+        error.response?.data?.message || error.message || "Invalid credentials";
       toast.error(message);
     } finally {
       setLoading(false);
