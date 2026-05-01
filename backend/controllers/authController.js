@@ -34,6 +34,7 @@ export const register = async (req, res) => {
     });
 
     res.status(201).json({
+      success: true, 
       message: "User registered",
       token: generateToken(user._id),
       user: {
@@ -72,6 +73,7 @@ export const login = async (req, res) => {
     }
 
     res.status(200).json({
+      success: true, 
       message: "Login successful",
       token: generateToken(user._id),
       user: {
@@ -92,5 +94,6 @@ export const login = async (req, res) => {
 // LOGOUT
 export const logout = async (req, res) => {
   // JWT logout handled on frontend
+  success: false, 
   res.status(200).json({ message: "Logged out successfully" });
 };
